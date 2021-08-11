@@ -19,7 +19,8 @@ namespace Pages
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromMinutes(2));
             WaitHelper waitHelper = new WaitHelper();
 
-            IWebElement firstItemOnFastestTab = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//div/button[@data-testid='searchresults_select_flight'][1]")));
+            //IWebElement firstItemOnFastestTab = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//div/button[@data-testid='searchresults_select_flight'][1]")));
+            IWebElement firstItemOnFastestTab = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//button[@data-testid='searchresults_select_flight'][1]")));
             firstItemOnFastestTab.Click();
 
             IWebElement selectFlightButton = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//button/span[text()='Select']")));

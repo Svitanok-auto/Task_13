@@ -1,37 +1,15 @@
 ﻿using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using Pages;
+using Task13.Pages;
 
 namespace Tests.UI
 {
-    public class TestsFliesResults
+    public class TestsFliesResults : BaseTest
     {
-        private IWebDriver _driver;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            _driver = new ChromeDriver();
-            _driver.Manage().Window.Maximize();
-            _driver.Navigate().GoToUrl("https://flights.booking.com/");
-
-            MainPage mainPage = new MainPage(_driver);
-            mainPage.SearchForFlights();
-        }
-
-        [OneTimeTearDown]
-        public void AfterAllTests()
-        {
-            _driver.Close();
-            _driver.Quit();
-        }
-
         [Test, Order(1)]
         [Category("UI")]
         public void GetResultsCount()
         {
-            FliesResults fliesResults = new FliesResults(_driver);
+            FliesResults fliesResults = new FliesResults(Driver);
             Assert.That(fliesResults.GetResults().Text, Does.Not.StartsWith("0").And.EndsWith("results"));
         }
 
@@ -39,7 +17,7 @@ namespace Tests.UI
         [Category("UI")]
         public void GetFlightTimesText()
         {
-            FliesResults fliesResults = new FliesResults(_driver);
+            FliesResults fliesResults = new FliesResults(Driver);
             Assert.AreEqual(fliesResults.GetFlightTimes().Text, "Flight times");
         }
 
@@ -47,7 +25,7 @@ namespace Tests.UI
         [Category("UI")]
         public void GetDepartsFromAirport()
         {
-            FliesResults fliesResults = new FliesResults(_driver);
+            FliesResults fliesResults = new FliesResults(Driver);
             Assert.AreEqual(fliesResults.GetDepartsFromParameter().Text, "Departs from Boryspil International Airport");
         }
 
@@ -55,7 +33,7 @@ namespace Tests.UI
         [Category("UI")]
         public void GetArrivesToAirport()
         {
-            FliesResults fliesResults = new FliesResults(_driver);
+            FliesResults fliesResults = new FliesResults(Driver);
             Assert.AreEqual(fliesResults.GetArrivesToParameter().Text, "Arrives to Copenhagen Airport");
         }
 
@@ -63,7 +41,7 @@ namespace Tests.UI
         [Category("UI")]
         public void SearchFlightsBestTabIsPresent()
         {
-            FliesResults fliesResults = new FliesResults(_driver);
+            FliesResults fliesResults = new FliesResults(Driver);
             Assert.AreEqual(fliesResults.GetBestTripsTab().Text, "Best");
         }
 
@@ -71,7 +49,7 @@ namespace Tests.UI
         [Category("UI")]
         public void SearchFlightsCheapestTabIsPresent()
         {
-            FliesResults fliesResults = new FliesResults(_driver);
+            FliesResults fliesResults = new FliesResults(Driver);
             Assert.AreEqual(fliesResults.GetCheapestTripsTab().Text, "Cheapest");
         }
 
@@ -79,7 +57,7 @@ namespace Tests.UI
         [Category("UI")]
         public void SearchFlightsFastestTabIsPresent()
         {
-            FliesResults fliesResults = new FliesResults(_driver);
+            FliesResults fliesResults = new FliesResults(Driver);
             Assert.AreEqual(fliesResults.GetFastestTripsTab().Text, "Fastest");
         }
     }

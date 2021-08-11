@@ -1,50 +1,55 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.PageObjects;
 using System;
-using System.Threading;
+using Task13.Helper;
 
-namespace Pages
+namespace Task13.Pages
 {
-    public class FastestTab
+    public class FastestTab : PageObjectBase
     {
-        private IWebDriver _driver;
-
-        public FastestTab(IWebDriver driver)
+        public FastestTab(IWebDriver driver) : base(driver) 
         {
-            _driver = driver;
+            PageFactory.InitElements(driver, this);
         }
+
+        [FindsBy(How = How.XPath, Using = ".//div[text()='Fastest']")]
+        public IWebElement SearchFastest { get; set; }
 
         public bool MaxJourney()
         {
-            Thread.Sleep(5000);
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromMinutes(2));
-            WaitHelper waitHelper = new WaitHelper();
-            IWebElement searchFastest = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//div[text()='Fastest']")));
-            searchFastest.Click();
+            WaitUntilPageIsLoaded();
 
+            WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromMinutes(2));
+            WaitHelper waitHelper = new WaitHelper();
+
+            SearchFastest.Click();
             IWebElement lastPage = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//div[contains(@class,'searchResultsList')]/following-sibling::div/div/div[last()]")));
             lastPage.Click();
 
             IWebElement lastItemJorneyTime = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//div[contains(@class,'searchResultsList')]/div[last()]//div[@style='width: 50%;']/div[contains(@class,'Text-module__root--variant-small')][1]")));
             IWebElement maxJourneyTime = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//div[text()='Max journey time']/following-sibling::div[1]")));
-            // correct to easy way
-            if (lastItemJorneyTime.Text.Contains(maxJourneyTime.Text))
-            {
-                return true;
-            }
-            else return false;
+
+            return lastItemJorneyTime.Text.Contains(maxJourneyTime.Text) ? true : false;
         }
 
-        public void OpenFastestTabLastPage()
+        public FastestTab OpenFastestTabLastPage()
         {
-            Thread.Sleep(2000);
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromMinutes(2));
-            WaitHelper waitHelper = new WaitHelper();
-            IWebElement searchFastest = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//div[text()='Fastest']")));
-            searchFastest.Click();
+            WaitUntilPageIsLoaded();
 
+            WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromMinutes(2));
+            WaitHelper waitHelper = new WaitHelper();
+
+            SearchFastest.Click();
             IWebElement lastPage = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//div[contains(@class,'searchResultsList')]/following-sibling::div/div/div[last()]")));
             lastPage.Click();
+            return this;
+        }
+
+        public void WaitUntilPageIsLoaded()
+        {
+            IJavascriptExecutor javascript = new IJavascriptExecutor();
+            javascript.WaitForLoad(Driver, 15);
         }
     }
 }

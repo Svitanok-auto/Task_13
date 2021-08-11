@@ -42,7 +42,7 @@ namespace Pages
 
         public void SetWhereFromBoxCriteria(WebDriverWait wait, WaitHelper waitHelper)
         {
-            IWebElement whereFromBox = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//label[@data-testid='searchbox_origin']//div[contains(@class,'inputContainer')]")));
+            IWebElement whereFromBox = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//div[@data-testid='searchbox_origin']//div[contains(@class,'inputContainer')]")));
             whereFromBox.Click();
             IWebElement selectedFromCheck = wait.Until(waitHelper.ElementIsClickable(By.XPath(".//span[text()='Included in your search (1)']")));
             if (selectedFromCheck.Displayed)
